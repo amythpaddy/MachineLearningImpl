@@ -7,6 +7,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
 from keras.layers import Dense, Embedding, LSTM, SpatialDropout1D
 from sklearn.model_selection import train_test_split
+from keras.models import load_model
 from keras.utils.np_utils import to_categorical
 #import matplotlib.pyplot as plt
 import re
@@ -55,29 +56,29 @@ print(X_train.shape,Y_train.shape)
 print(X_test.shape,Y_test.shape)
 #
 batch_size = 32
-history = model.fit(X_train, Y_train, epochs=20, batch_size=batch_size, verbose=2)
-model.save('sentiment_analysis.h5')
+# history = model.fit(X_train, Y_train, epochs=2, batch_size=batch_size, verbose=2)
+# model.save('sentiment_analysis.h5')
 #
-import matplotlib.pyplot as plt
-plt.plot(history.history['acc'])
-plt.plot(history.history['val_acc'])
-plt.title('Model accuracy')
-plt.ylabel('Accuracy')
-plt.xlabel('Epoch')
-plt.legend(['Train', 'Test'], loc='upper left')
-plt.show()
-#
-# Plot training & validation loss values
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title('Model loss')
-plt.ylabel('Loss')
-plt.xlabel('Epoch')
-plt.legend(['Train', 'Test'], loc='upper left')
-plt.show()
+# import matplotlib.pyplot as plt
+# plt.plot(history.history['acc'])
+# plt.plot(history.history['val_acc'])
+# plt.title('Model accuracy')
+# plt.ylabel('Accuracy')
+# plt.xlabel('Epoch')
+# plt.legend(['Train', 'Test'], loc='upper left')
+# plt.show()
+# #
+# # Plot training & validation loss values
+# plt.plot(history.history['loss'])
+# plt.plot(history.history['val_loss'])
+# plt.title('Model loss')
+# plt.ylabel('Loss')
+# plt.xlabel('Epoch')
+# plt.legend(['Train', 'Test'], loc='upper left')
+# plt.show()
 
 validation_size=1500
-
+model = load_model("sentiment_analysis.h5")
 X_validate = X_test[-validation_size:]
 Y_validate = Y_test[-validation_size:]
 X_test = X_test[:-validation_size]
