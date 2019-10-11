@@ -1,6 +1,6 @@
 import pandas as pd
 from keras import Sequential
-from keras.layers import LSTM, TimeDistributed, Dense
+from keras.layers import LSTM, TimeDistributed, Dense, Embedding, RepeatVector
 from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 
@@ -41,7 +41,7 @@ print(hin_seq.shape)
 
 eng_timestep = 1
 hin_timestep = 1
-eng_seq = eng_seq.reshape(len(eng), eng_timestep, eng_max_len)
+# eng_seq = eng_seq.reshape(len(eng), eng_timestep, eng_max_len)
 hin_seq = hin_seq.reshape(len(hin), hin_timestep, hin_max_len)
 print(eng_seq.shape)
 print(hin_seq.shape)
@@ -49,7 +49,11 @@ print(hin_seq.shape)
 
 def lstm_model():
     model = Sequential()
-    model.add(LSTM(len(eng), input_shape=(eng_timestep, eng_max_len), return_sequences=True))
+    model.add(Embedding(eng_vocab_len,10,input_length=eng_max_len))
+    model.add(LSTM(100))
+    model.add(RepeatVector(hin_timestep))
+    # model.add(LSTM(len(eng), input_shape=(eng_timestep, eng_max_len), return_sequences=True))
+    model.add(LSTM(100,return_sequences=True))
     model.add(TimeDistributed(Dense(hin_max_len)))
     model.compile(loss='mean_squared_error', optimizer='adam')
     model.summary()
